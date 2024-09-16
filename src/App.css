@@ -1,0 +1,302 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Fredoka+One&display=swap');
+
+:root {
+  --primary-color: #6c5ce7;
+  --secondary-color: #00cec9;
+  --accent-color: #fdcb6e;
+  --text-color: #2d3436;
+  --bg-color: #ffffff;
+  --wrong-color: #d63031;
+  --correct-color: #00b894;
+}
+
+.dark-theme {
+  --primary-color: #a29bfe;
+  --secondary-color: #81ecec;
+  --accent-color: #ffeaa7;
+  --text-color: #dfe6e9;
+  --bg-color: #2d3436;
+  --wrong-color: #ff7675;
+  --correct-color: #55efc4;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.game-container {
+  background-color: var(--bg-color);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, var(--accent-color) 20%, transparent 20%),
+              radial-gradient(circle, transparent 20%, var(--accent-color) 20%, transparent 30%),
+              radial-gradient(circle, var(--accent-color) 20%, transparent 20%);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px, 10px 10px;
+  animation: backgroundAnimation 50s linear infinite;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+@keyframes backgroundAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.game-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  letter-spacing: 2px;
+}
+
+
+.hangman-figure {
+  width: 200px;
+  height: 250px;
+  margin: 0 auto 2rem;
+}
+
+.hangman-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hangman-part {
+  stroke: var(--text-color);
+  stroke-width: 3;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.hangman-part.show {
+  animation: drawLine 0.5s ease forwards;
+}
+
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.word-display {
+  font-size: 2.5rem;
+  margin: 1.5rem 0;
+  letter-spacing: 0.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.word-display span {
+  display: inline-block;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.word-display span.revealed {
+  animation: flipLetter 0.5s ease-out forwards;
+}
+
+@keyframes flipLetter {
+  0% {
+    transform: rotateX(-90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+.keyboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.letter-btn {
+  padding: 0.8rem 1rem;
+  margin: 0.3rem;
+  background-color: var(--primary-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.letter-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.5s ease;
+}
+
+.letter-btn:hover::before {
+  width: 200%;
+  height: 200%;
+}
+
+.letter-btn:disabled {
+  background-color: var(--text-color);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.letter-btn.correct {
+  background-color: var(--correct-color);
+}
+
+.letter-btn.wrong {
+  background-color: var(--wrong-color);
+}
+
+.game-status {
+  margin: 1.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.win {
+  color: var(--correct-color);
+  animation: pulse 1s infinite;
+}
+
+.lose {
+  color: var(--wrong-color);
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-5px);
+  }
+  40%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+.reset-btn {
+  padding: 0.8rem 1.5rem;
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.reset-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.reset-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: rotate(30deg);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.game-container * {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.letter-btn, .reset-btn {
+  animation: slideIn 0.3s ease-out;
+}
